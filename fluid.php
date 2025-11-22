@@ -4,12 +4,12 @@ header("Content-Type: text/plain");
 $result = "";
 $apiKey = "";
 
-if(!isset($_POST["q"])){
+if(!isset($_REQUEST["q"])){
     exit("not posted");
 }
 
 $input = "Give me the solution for the question below by following these rules:
-1. Write the code in Java.
+1. Write the code in Java & Python Both.
 2. Name the main class `Main`.
 3. Use standard input and output with `Scanner` and `System.out`.
 4. Do not include comments in the code.
@@ -18,11 +18,12 @@ $input = "Give me the solution for the question below by following these rules:
 7. Search online for the problem statement and check previous submissions for reference.
 8. Return the code as plain text, without any language identifier.
 9. Ensure the code's output is tested with the input and output relevant to the question.
+10. at the end of response, add the python code. python result will not maintain rules 2 to rules 9. python code must must be super easy. before starting python code, add a separator with dashes line to separate python code and java code.
 
-question: ```".$_POST["q"]."```";
+question: ```".$_REQUEST["q"]."```";
 
 
-$url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=" . $apiKey;
+$url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" . $apiKey;
 $data = [
     "contents" => [
         [
@@ -54,5 +55,6 @@ $responseDecoded = json_decode($response, true);
 if(isset($responseDecoded['candidates'][0]['content']['parts'][0]['text'])){
     echo $responseDecoded['candidates'][0]['content']['parts'][0]['text'];
 }else{
-    echo "error";
+    // echo "error";
+    echo $response;
 }
